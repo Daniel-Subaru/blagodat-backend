@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Благодать Крамничка — Христианська крамничка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/category.css" />
+  <link rel="icon" href="assests/favicon/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <!-- ====== NAVBAR ====== -->
+  <header class="navbar" id="navbar">
+    <div class="navbar__inner">
+
+      <!-- Logo -->
+      <a href="#" class="navbar__logo">
+        <img src="assests/favicon/logo.png" alt="Логотип Благodать Кramниця" class="navbar__logo-img">
+        <span class="navbar__logo-text">Благoдать<br><em>Крaмниця</em></span>
+      </a>
+
+      <!-- Navigation links -->
+    <nav class="navbar__nav" id="navMenu">
+        <div class="navbar__dropdown">
+            <a href="#categories" class="navbar__link dropdown-trigger">Категорії ▼</a>
+            <div class="dropdown-menu">
+                <a href="/pages/bibles.html" class="dropdown-item">📖 Біблії</a>
+                <a href="/pages/paintings.html" class="dropdown-item">🖼️ Картини</a>
+                <a href="/pages/clocks.html" class="dropdown-item">🕐 Годинники</a>
+                <a href="/pages/books.html" class="dropdown-item">📚 Книги</a>
+                <a href="/pages/games.html" class="dropdown-item">🎲 Ігри</a>
+                <a href="/pages/cups.html" class="dropdown-item">☕ Чашки</a>
+            </div>
+        </div>
+        <a href="#products" class="navbar__link">Товари</a>
+        <a href="#about" class="navbar__link">Про нас</a>
+        <a href="#contact" class="navbar__link">Контакти</a>
+    </nav>
+
+      <!-- Right controls -->
+      <div class="navbar__controls">
+        <!-- Theme toggle -->
+        <button class="theme-toggle" id="themeToggle" aria-label="Змінити тему" title="Змінити тему">
+          <span class="theme-toggle__icon theme-toggle__sun">☀️</span>
+          <span class="theme-toggle__icon theme-toggle__moon">🌙</span>
+          <span class="theme-toggle__track"></span>
+        </button>
+
+        <!-- Cart button -->
+        <button class="cart-btn" id="cartBtn" aria-label="Кошик">
+          <svg class="cart-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-btn__count" id="cartCount">0</span>
+        </button>
+
+        <!-- NEW: Auth button -->
+        <button src="/pages/login.html" class="auth-btn" id="authBtn" aria-label="Увійти">
+            <svg class="auth-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h6v6M14 10l7-7M5 3h6v6M4 10l7-7M15 21h6v-6M14 14l7 7M5 21h6v-6M4 14l7 7" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+            <span class="auth-btn__text" id="authBtnText">Увійти</span>
+        </button>
+
+        <!-- Burger -->
+        <button class="burger" id="burgerBtn" aria-label="Меню">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== HERO ====== -->
+  <section class="hero">
+    <div class="hero__bg-pattern"></div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">✦ Ласкаво просимо ✦</p>
+      <h1 class="hero__title"><span class="hero__title-accent">Благодать -</span><br>Крамничка<br>речей, які проповідують</h1>
+      <p class="hero__subtitle">Біблії, книги, подарунки та декор для кожного вірянина та його родини</p>
+      <div class="hero__actions">
+        <a href="#products" class="btn btn--primary">Переглянути товари</a>
+        <a href="#categories" class="btn btn--outline">Всі категорії</a>
+      </div>
+    </div>
+    <div class="hero__decoration">
+      <div class="hero__deco-cross">✝</div>
+      <div class="hero__deco-star">✦</div>
+      <div class="hero__deco-circle"></div>
+    </div>
+  </section>
+
+<!-- ====== ПОШУК НА ГОЛОВНІЙ ====== -->
+<section class="search-global">
+    <div class="container">
+        <div class="search-global__wrapper">
+            <div class="search-global__icon">🔍</div>
+            <input type="text" id="globalSearchInput" class="search-global__input"
+                placeholder="Пошук товарів за назвою... (Біблія, книга, чашка...)" autocomplete="off">
+            <button class="search-global__clear" id="globalSearchClear">✖</button>
+        </div>
+        <div class="search-global__results" id="globalSearchResults" style="display: none;">
+            <div class="search-results__header">
+                <span>Знайдено: <span id="searchResultsCount">0</span> товарів</span>
+                <button class="search-results__close" id="searchResultsClose">Закрити</button>
+            </div>
+            <div class="search-results__grid" id="searchResultsGrid"></div>
+        </div>
+    </div>
+</section>
+
+  <!-- ====== CATEGORIES ====== -->
+  <section class="categories section" id="categories">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Що шукаєте?</p>
+        <h2 class="section-title">Каталог</h2>
+      </div>
+
+      <div class="categories__grid">
+
+        <!-- Категорія: Біблії -->
+        <button class="cat-card" data-category="bibles" onclick="window.location.href='/pages/bibles.html'">
+          <div class="cat-card__icon">📖</div>
+          <h3 class="cat-card__name">Біблії</h3>
+          <p class="cat-card__count" data-cat-count="bibles">12 товарів</p>
+          <div class="cat-card__glow"></div>
+        </button>
+
+        <!-- Категорія: Картини -->
+        <button class="cat-card" data-category="paintings" onclick="window.location.href='/pages/paintings.html'">
+          <div class="cat-card__icon">🖼️</div>
+          <h3 class="cat-card__name">Картини</h3>
+          <p class="cat-card__count" data-cat-count="paintings">8 товарів</p>
+          <div class="cat-card__glow"></div>
+        </button>
+
+        <!-- Категорія: Годинники -->
+        <button class="cat-card" data-category="clocks" onclick="window.location.href='/pages/clocks.html'">
+          <div class="cat-card__icon">🕐</div>
+          <h3 class="cat-card__name">Годинники</h3>
+          <p class="cat-card__count" data-cat-count="clocks">6 товарів</p>
+          <div class="cat-card__glow"></div>
+        </button>
+
+        <!-- Категорія: Книги -->
+        <button class="cat-card" data-category="books" onclick="window.location.href='/pages/books.html'">
+          <div class="cat-card__icon">📚</div>
+          <h3 class="cat-card__name">Книги</h3>
+          <p class="cat-card__count" data-cat-count="books">24 товари</p>
+          <div class="cat-card__glow"></div>
+        </button>
+
+        <!-- Категорія: Ігри -->
+        <button class="cat-card" data-category="games" onclick="window.location.href='/pages/games.html'">
+          <div class="cat-card__icon">🎲</div>
+          <h3 class="cat-card__name">Ігри</h3>
+          <p class="cat-card__count" data-cat-count="games">10 товарів</p>
+          <div class="cat-card__glow"></div>
+        </button>
+
+        <!-- Категорія: Чашки -->
+        <button class="cat-card" data-category="cups" onclick="window.location.href='/pages/cups.html'">
+          <div class="cat-card__icon">☕</div>
+          <h3 class="cat-card__name">Чашки</h3>
+          <p class="cat-card__count" data-cat-count="cups">15 товарів</p>
+          <div class="cat-card__glow"></div>
+        </button>
+
+        <!-- ==============================
+             ТУТ МОЖНА ДОДАВАТИ НОВІ КАТЕГОРІЇ
+             Скопіюй блок нижче і заміни:
+             - data-category="назва_категорії"
+             - іконку emoji
+             - назву
+             - кількість товарів
+        ================================= -->
+        <!-- 
+        <button class="cat-card" data-category="new_category">
+          <div class="cat-card__icon">🆕</div>
+          <h3 class="cat-card__name">Назва</h3>
+          <p class="cat-card__count" data-cat-count="new_category">0 товарів</p>
+          <div class="cat-card__glow"></div>
+        </button>
+        -->
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PRODUCTS ====== -->
+  <section class="products section" id="products">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Наш асортимент</p>
+        <h2 class="section-title">Популярні товари</h2>
+      </div>
+
+      <!-- Filter bar -->
+
+      <!-- Products grid -->
+      <div class="products__grid" id="productsGrid">
+
+        <!-- ==============================
+             ТОВАРИ — шаблон однієї картки:
+             data-category="назва_категорії"
+             data-id="унікальний_номер"
+             data-price="ціна_числом"
+        ================================= -->
+
+
+        <!-- ==============================
+             ТУТ МОЖНА ДОДАВАТИ НОВІ ТОВАРИ
+             Скопіюй блок вище, зміни:
+             - data-category="категорія"
+             - data-id="унікальний_id"
+             - data-price="ціна"
+             - style="background:#колір"
+             - emoji, назву, ціну
+        ================================= -->
+
+      </div><!-- /products__grid -->
+    </div>
+  </section>
+
+  <!-- ====== ABOUT STRIP ====== -->
+  <section class="about section" id="about">
+    <div class="container">
+      <div class="about__grid">
+        <div class="about__text">
+          <p class="section-label">Про нас</p>
+          <h2 class="section-title">З любов'ю до<br>Слова Божого</h2>
+          <p class="about__desc">Ми — невелика родинна крамниця, яка з 2016 року допомагає християнам знаходити книги, подарунки та декор для духовного зростання. Кожен товар обраний з молитвою та любов'ю.</p>
+          <div class="about__stats">
+            <div class="about__stat"><strong>1000+</strong><span>Товарів</span></div>
+            <div class="about__stat"><strong>10 000+</strong><span>Клієнтів</span></div>
+            <div class="about__stat"><strong>10 років</strong><span>Досвіду</span></div>
+          </div>
+        </div>
+        <div class="about__deco">
+          <div class="about__cross-big">✝</div>
+          <div class="about__quote">«Нехай мир і благодать збільшуються в вас через пізнання Бога та Ісуса, нашого Господа.»<br><em>2Петр.1:2.</em></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CONTACT ====== -->
+  <section class="contact section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Зв'язатись з нами</p>
+        <h2 class="section-title">Контакти</h2>
+      </div>
+      <div class="contact__grid">
+        <div class="contact__card">
+          <div class="contact__icon">📍</div>
+          <h4>Адреса</h4>
+          <p><a href="https://www.google.com/maps/place/%D0%B2%D1%83%D0%BB.+%D0%9C%D0%BE%D1%87%D1%83%D0%BB%D1%8C%D1%81%D1%8C%D0%BA%D0%BE%D0%B3%D0%BE,+1,+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA" target="_blank" rel="noopener noreferrer" class="contact__link">вул. Мочульського, 1, <div></div> Івано-Франківськ</a></p>
+        </div>
+        <div class="contact__card">
+          <div class="contact__icon">📞</div>
+          <h4>Телефон</h4>
+          <a href="tel:+380954002467" class="contact__link">+380 (95) 400 24 67 <div></div></a>
+          <a href="tel:+380960479410" class="contact__link">+380 (96) 047 94 10</a>
+        </div>
+        <div class="contact__card">
+          <div class="contact__icon">✉️</div>
+          <h4>Email</h4>
+          <a href="mailto:michael.bmw911@gmail.com" class="contact__link">michael.bmw911@gmail.com</a>
+        </div>
+        <div class="contact__card">
+          <div class="contact__icon">🕐</div>
+          <h4>Години роботи</h4>
+          <p>Пн–Сб: 10:00–19:00</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <span class="navbar__logo-icon">✝</span>
+          <span>Благодать Крамниця</span>
+        </div>
+        <p class="footer__copy">© 2026 Благодать Крамниця. Усі права захищені.</p>
+        <div class="footer__socials">
+          <a href="https://invite.viber.com/?g2=AQBR63HLOyLWw0vEQwInxoDgI3SpdBgbaNMeOcOye0Ckyi1RnixnKnYAZDemlYao" class="footer__social" aria-label="Viber"><img src="img/244-2440470_viber-icon-logo-transparent-png-viber-icon.png" alt="Viber"></a>
+          <a href="https://www.instagram.com/blagodat_777?igsh=NHhqNDVsM3l3OHJv" class="footer__social" aria-label="Instagram"><img src="img/Instagram_icon.png" alt="Instagram"></a>
+          <a href="https://t.me/+_62Sdk7I1_ZiODdi" class="footer__social" aria-label="Telegram"><img src="img/Telegram_logo.svg.png" alt="Telegram"></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====== CART SIDEBAR ====== -->
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-sidebar__header">
+      <h3>🛒 Кошик</h3>
+      <button class="cart-sidebar__close" id="cartClose" aria-label="Закрити">&times;</button>
+    </div>
+    <div class="cart-sidebar__body" id="cartBody">
+      <div class="cart-empty" id="cartEmpty">
+        <p>😔 Кошик порожній</p>
+        <p class="cart-empty__sub">Додайте товари, щоб продовжити</p>
+      </div>
+      <ul class="cart-items" id="cartItems"></ul>
+    </div>
+    <div class="cart-sidebar__footer" id="cartFooter">
+      <div class="cart-total">
+        <span>Разом:</span>
+        <strong id="cartTotal">0 ₴</strong>
+      </div>
+      <a href="checkout.html" class="btn btn--primary btn--full" style="text-decoration: none; display: block; text-align: center;">Оформити замовлення</a>
+    </div>
+  </aside>
+
+  
+
+  <!-- Cart overlay -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+<!-- Back to top -->
+    <button class="back-to-top" id="backToTop" aria-label="Вгору">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20">
+        <polyline points="18 15 12 9 6 15" />
+    </svg>
+    </button>
+  <script src="data.js"></script>  
+  <script src="js/script.js"></script>
+  <script src="js/category-search.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/quickview.js"></script>
+  
+  <script>
+    function renderPopularProducts() {
+            const container = document.getElementById('productsGrid');
+            if (!container) return;
+
+            const products = getPopularProducts();
+
+            if (products.length === 0) {
+                container.innerHTML = '<div class="search-no-results">😔 Товарів поки немає</div>';
+                return;
+            }
+
+            container.innerHTML = products.map(product => {
+                const finalPrice = getFinalPrice(product);
+                const badgeHtml = getBadgeHtml(product);
+                const starsHtml = getStarsHtml(product.rating);
+
+                // Формуємо ціну ЗІ знижкою (без статусу наявності)
+                let priceHtml = '';
+                if (product.discount && product.discount > 0) {
+                    priceHtml = `<span style="text-decoration:line-through; font-size:0.8rem; margin-right:6px;">${product.originalPrice} ₴</span> 
+                         <span style="color:#e05555; font-weight:800;">${finalPrice} ₴</span>`;
+                } else {
+                    priceHtml = `<span style="font-weight:800;">${finalPrice} ₴</span>`;
+                }
+
+                return `
+            <div class="product-card" data-category="${product.category}" data-id="${product.id}" data-price="${finalPrice}">
+                ${badgeHtml}
+                <div class="product-card__img-wrap">
+                    <div class="product-card__img" style="background:${product.bgColor}; display:flex; align-items:center; justify-content:center;">
+                        ${product.image ?
+                        `<img src="${product.image}" alt="${product.name}" class="product-card__image">` :
+                        `<span class="product-card__emoji">${product.emoji}</span>`
+                    }
+                    </div>
+                    <div class="product-card__overlay">
+                        <button class="product-card__quick" data-id="${product.id}">Швидкий перегляд</button>
+                    </div>
+                </div>
+                <div class="product-card__body">
+                    <p class="product-card__cat">${product.categoryName}</p>
+                    <h3 class="product-card__name">${product.name}</h3>
+                    <div class="product-card__stars">${starsHtml}</div>
+                    ${product.sku ? `<div class="product-sku">Артикул: ${product.sku}</div>` : ''}
+                    <div class="product-card__footer">
+                        <div class="product-card__price">${priceHtml}</div>
+                        ${getStockHtml(product)}
+                        <button class="product-card__buy btn btn--primary btn--sm" data-id="${product.id}" ${product.stock <= 0 ? 'disabled' : ''}>
+                            🛒 ${product.stock > 0 ? 'В кошик' : 'Немає'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+            }).join('');
+        }
+</script>
+<script>
+
+   // ========== ГЛОБАЛЬНИЙ ПОШУК ЧЕРЕЗ data.js ==========
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('globalSearchInput');
+        const searchClear = document.getElementById('globalSearchClear');
+        const resultsPanel = document.getElementById('globalSearchResults');
+        const resultsGrid = document.getElementById('searchResultsGrid');
+        const resultsCount = document.getElementById('searchResultsCount');
+        const resultsClose = document.getElementById('searchResultsClose');
+
+        if (!searchInput) return;
+
+        let debounceTimer;
+        let allProducts = [];
+
+        // Отримуємо всі товари з data.js
+        function loadAllProducts() {
+            if (typeof getAllProducts === 'function') {
+                allProducts = getAllProducts();
+            } else {
+                console.warn('getAllProducts not found, make sure data.js is loaded');
+                allProducts = [];
+            }
+        }
+
+        // Рендер результатів пошуку
+        function renderSearchResults(products) {
+            if (products.length === 0) {
+                resultsGrid.innerHTML = '<div class="search-no-results">😔 Нічого не знайдено</div>';
+                return;
+            }
+
+            resultsGrid.innerHTML = products.map(product => {
+                const finalPrice = typeof getFinalPrice === 'function' ? getFinalPrice(product) : product.originalPrice;
+                const priceHtml = product.discount > 0
+                    ? `<span style="text-decoration:line-through; font-size:0.7rem;">${product.originalPrice} ₴</span> <span style="color:#e05555;">${finalPrice} ₴</span>`
+                    : `<span>${finalPrice} ₴</span>`;
+                const starsHtml = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
+                const imageUrl = product.image || (product.images && product.images[0]) || '';
+                const imageHtml = imageUrl
+                    ? `<img src="${imageUrl}" alt="${product.name}" style="width:100%; height:100%; object-fit:cover;">`
+                    : `<span style="font-size:2rem;">${product.emoji || '📦'}</span>`;
+
+                return `
+                <div class="search-result-card" data-category="${product.category}" data-id="${product.id}">
+                    <div class="search-result-card__img" style="background:${product.bgColor || '#ddd'};">${imageHtml}</div>
+                    <div class="search-result-card__info">
+                        <span class="search-result-card__category">${product.categoryName}</span>
+                        <h4 class="search-result-card__name">${escapeHtml(product.name)}</h4>
+                        <div class="search-result-card__stars">${starsHtml}</div>
+                        <div class="search-result-card__price">${priceHtml}</div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+
+            // Додаємо події кліку на результати
+            document.querySelectorAll('.search-result-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const category = card.dataset.category;
+                    const productId = card.dataset.id;
+                    // Переходимо на сторінку категорії з хешем товару
+                    window.location.href = `pages/${category}.html#product-${productId}`;
+                });
+            });
+        }
+
+        // Фільтрація товарів за текстом
+        function searchProducts(term) {
+            const searchTerm = term.trim().toLowerCase();
+            if (!searchTerm) {
+                resultsPanel.style.display = 'none';
+                return;
+            }
+
+            const filtered = allProducts.filter(product =>
+                product.name.toLowerCase().includes(searchTerm) ||
+                (product.categoryName && product.categoryName.toLowerCase().includes(searchTerm)) ||
+                (product.description && product.description.toLowerCase().includes(searchTerm))
+            );
+
+            resultsCount.textContent = filtered.length;
+            renderSearchResults(filtered);
+            resultsPanel.style.display = 'block';
+        }
+
+        // Ініціалізація
+        function initGlobalSearch() {
+            loadAllProducts();
+
+            // Обробник вводу з debounce
+            searchInput.addEventListener('input', function (e) {
+                clearTimeout(debounceTimer);
+                const term = e.target.value;
+                searchClear.style.display = term ? 'flex' : 'none';
+                debounceTimer = setTimeout(() => searchProducts(term), 300);
+            });
+
+            // Очищення
+            searchClear.addEventListener('click', function () {
+                searchInput.value = '';
+                searchClear.style.display = 'none';
+                resultsPanel.style.display = 'none';
+                searchInput.focus();
+            });
+
+            // Закриття результатів
+            resultsClose.addEventListener('click', function () {
+                resultsPanel.style.display = 'none';
+            });
+
+            // Клік поза результатами
+            document.addEventListener('click', function (e) {
+                if (!resultsPanel.contains(e.target) && e.target !== searchInput) {
+                    resultsPanel.style.display = 'none';
+                }
+            });
+        }
+
+        // Екранування HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function (m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        initGlobalSearch();
+    });
+
+    renderPopularProducts();
+</script>
+</body>
+</html>

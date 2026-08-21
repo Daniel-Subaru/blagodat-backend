@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Оформлення замовлення — Благодать Крамниця</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="assests/favicon/favicon.ico" type="image/x-icon" />
+  <style>
+    .checkout-container {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .checkout__section {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* ===== КОШИК ТАБЛИЦЯ ===== */
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .cart-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 2px solid var(--border-strong);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .cart-table td {
+      padding: 15px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .cart-item-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cart-item-thumb {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-md);
+      background: var(--bg-section);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .cart-item-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cart-item-info h4 {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .cart-item-info p {
+      margin: 4px 0 0 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 12px;
+      background: var(--bg-section);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+    }
+
+    .btn-remove {
+      background: none;
+      border: none;
+      color: #e05555;
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-decoration: underline;
+      padding: 0;
+      transition: color var(--transition);
+    }
+
+    .btn-remove:hover {
+      color: #d43838;
+    }
+
+    /* ===== ФОРМА ЗАМОВЛЕННЯ ===== */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      background: var(--bg-section);
+      transition: border-color var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--bg-card);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-error {
+      color: #e05555;
+      font-size: 0.85rem;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .form-group.error input,
+    .form-group.error textarea {
+      border-color: #e05555;
+    }
+
+    .form-group.error .form-error {
+      display: block;
+    }
+
+    /* ===== СПОСОБИ ОПЛАТИ ===== */
+    .payment-methods {
+      margin-bottom: 24px;
+    }
+
+    .payment-option {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition);
+      background: var(--bg-section);
+    }
+
+    .payment-option:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .payment-option input[type="radio"] {
+      margin-right: 12px;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+    }
+
+    .payment-option.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .payment-option label {
+      margin: 0;
+      cursor: pointer;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+    }
+
+    .payment-icon {
+      font-size: 1.5rem;
+    }
+
+    /* ===== КНОПКИ ===== */
+    .checkout-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 14px 24px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: inherit;
+    }
+
+    .btn--primary {
+      background: var(--accent);
+      color: white;
+      flex: 1;
+    }
+
+    .btn--primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn--primary:active {
+      transform: translateY(0);
+    }
+
+    .btn--outline {
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid var(--border);
+    }
+
+    .btn--outline:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ===== ПУСТО КОШИКА ===== */
+    .checkout-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 40px;
+    }
+
+    .checkout-empty h2 {
+      font-size: 1.8rem;
+      margin: 20px 0;
+      color: var(--text-primary);
+    }
+
+    .checkout-empty p {
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    /* ===== TOAST ПОВІДОМЛЕННЯ ===== */
+    .toast {
+      position: fixed;
+      bottom: -100px;
+      right: 20px;
+      background: var(--text-primary);
+      color: var(--bg-page);
+      padding: 16px 24px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      transition: bottom var(--transition);
+      max-width: 400px;
+    }
+
+    .toast.show {
+      bottom: 20px;
+    }
+
+    .toast.error {
+      background: #e05555;
+      color: white;
+    }
+
+    .toast.success {
+      background: #4caf50;
+      color: white;
+    }
+
+    /* ===== LOADING ===== */
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top: 2px solid white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin: 40px auto;
+      }
+
+      .checkout-actions {
+        flex-direction: column;
+      }
+
+      .cart-table {
+        font-size: 0.85rem;
+      }
+
+      .cart-table th,
+      .cart-table td {
+        padding: 10px 8px;
+      }
+
+      .cart-item-thumb {
+        width: 50px;
+        height: 50px;
+      }
+
+      .section-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====== NAVBAR ====== -->
+  <header class="navbar" id="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="assests/favicon/logo.png" alt="Логотип Благодать Крамниця" class="navbar__logo-img">
+        <span class="navbar__logo-text">Благодать<br><em>Крамниця</em></span>
+      </a>
+
+      <nav class="navbar__nav" id="navMenu">
+        <a href="index.html#categories" class="navbar__link">Категорії</a>
+        <a href="index.html#products" class="navbar__link">Товари</a>
+        <a href="index.html#about" class="navbar__link">Про нас</a>
+        <a href="index.html#contact" class="navbar__link">Контакти</a>
+      </nav>
+
+      <div class="navbar__controls">
+        <button class="theme-toggle" id="themeToggle" aria-label="Змінити тему" title="Змінити тему">
+          <span class="theme-toggle__icon theme-toggle__sun">☀️</span>
+          <span class="theme-toggle__icon theme-toggle__moon">🌙</span>
+          <span class="theme-toggle__track"></span>
+        </button>
+
+        <button class="cart-btn" id="cartBtn" aria-label="Повернутися в кошик">
+          <svg class="cart-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-btn__count" id="cartCount">0</span>
+        </button>
+
+        <button class="burger" id="burgerBtn" aria-label="Меню">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== CHECKOUT SECTION ====== -->
+  <main style="background: var(--bg-page); min-height: calc(100vh - 200px);">
+    <div class="checkout-container" id="checkoutContainer">
+      <!-- Таблиця товарів -->
+      <div class="checkout__section">
+        <h2 class="section-title">🛒 Ваше замовлення</h2>
+        <div id="cartTableContainer">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Товар</th>
+                <th>Кількість</th>
+                <th>Ціна</th>
+                <th style="text-align: right;">Сума</th>
+              </tr>
+            </thead>
+            <tbody id="cartTableBody">
+            </tbody>
+          </table>
+          <div class="cart-total-row">
+            <span>Разом:</span>
+            <span id="checkoutTotal">0 ₴</span>
+          </div>
+        </div>
+        <div id="emptyCartMessage" style="display: none; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+          <p>😔 Кошик порожній</p>
+          <a href="index.html" class="btn btn--primary" style="margin-top: 20px; display: inline-block; text-decoration: none;">← Повернутися до товарів</a>
+        </div>
+      </div>
+
+      <!-- Форма замовлення -->
+      <div class="checkout__section">
+        <h2 class="section-title">📋 Дані замовника</h2>
+        <form id="checkoutForm">
+          <!-- ПІБ -->
+          <div class="form-group">
+            <label for="fullName">Повне ім'я *</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Іван Петренко" required>
+            <span class="form-error">Будь ласка, введіть ваше ім'я</span>
+          </div>
+
+          <!-- Телефон -->
+          <div class="form-group">
+            <label for="phone">Телефон *</label>
+            <input type="tel" id="phone" name="phone" placeholder="+380 (95) 123 45 67" required>
+            <span class="form-error">Введіть корректний номер телефону</span>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" placeholder="example@mail.com" required>
+            <span class="form-error">Введіть корректну адресу електронної пошти</span>
+          </div>
+
+          <!-- Адреса -->
+          <div class="form-group">
+            <label for="address">Адреса доставки *</label>
+            <textarea id="address" name="address" placeholder="Місто, вулиця, будинок, кв." required></textarea>
+            <span class="form-error">Будь ласка, введіть адресу доставки</span>
+          </div>
+
+          <!-- Способи оплати -->
+          <div class="payment-methods">
+            <p style="color: var(--text-secondary); font-weight: 600; margin-bottom: 12px;">💳 Спосіб оплати *</p>
+
+            <div class="payment-option selected">
+              <input type="radio" id="payment-monobank" name="paymentMethod" value="monobank" checked>
+              <label for="payment-monobank">
+                <span class="payment-icon">🏦</span>
+                <div>
+                  <div style="font-weight: 600;">Monobank</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Швидко та безпечно</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="payment-option">
+              <input type="radio" id="payment-privatbank" name="paymentMethod" value="privatbank">
+              <label for="payment-privatbank">
+                <span class="payment-icon">🏛️</span>
+                <div>
+                  <div style="font-weight: 600;">ПриватБанк</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Карта або переводи</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="payment-option">
+              <input type="radio" id="payment-cash" name="paymentMethod" value="cash">
+              <label for="payment-cash">
+                <span class="payment-icon">💰</span>
+                <div>
+                  <div style="font-weight: 600;">Готівка при доставці</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Оплата при отримані</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Кнопки -->
+          <div class="checkout-actions">
+            <button type="button" class="btn btn--outline" id="btnCancel">← Повернутися</button>
+            <button type="submit" class="btn btn--primary" id="btnSubmit">Оформити замовлення</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <span class="navbar__logo-icon">✝</span>
+          <span>Благодать Крамниця</span>
+        </div>
+        <p class="footer__copy">© 2026 Благодать Крамниця. Усі права захищені.</p>
+        <div class="footer__socials">
+          <a href="https://invite.viber.com/?g2=AQBR63HLOyLWw0vEQwInxoDgI3SpdBgbaNMeOcOye0Ckyi1RnixnKnYAZDemlYao" class="footer__social" aria-label="Viber"><img src="img/244-2440470_viber-icon-logo-transparent-png-viber-icon.png" alt="Viber"></a>
+          <a href="https://www.instagram.com/blagodat_777?igsh=NHhqNDVsM3l3OHJv" class="footer__social" aria-label="Instagram"><img src="img/Instagram_icon.png" alt="Instagram"></a>
+          <a href="https://t.me/+_62Sdk7I1_ZiODdi" class="footer__social" aria-label="Telegram"><img src="img/Telegram_logo.svg.png" alt="Telegram"></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="data.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

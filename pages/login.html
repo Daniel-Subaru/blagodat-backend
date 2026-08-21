@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вхід / Реєстрація — Благодать Крамничка</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
+    <link rel="icon" href="/assests/favicon/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+
+    <!-- ===== НАВІГАЦІЯ (така ж, як на головній) ===== -->
+    <header class="navbar" id="navbar">
+        <div class="navbar__inner">
+    
+            <!-- Logo -->
+            <a href="#" class="navbar__logo">
+                <img src="/assests/favicon/logo.png" alt="Логотип Благodать Кramниця" class="navbar__logo-img">
+                <span class="navbar__logo-text">Благoдать<br><em>Крaмниця</em></span>
+            </a>
+    
+            <!-- Navigation links -->
+            <nav class="navbar__nav" id="navMenu">
+                <div class="navbar__dropdown">
+                    <a href="#categories" class="navbar__link dropdown-trigger">Категорії ▼</a>
+                    <div class="dropdown-menu">
+                        <a href="/pages/bibles.html" class="dropdown-item">📖 Біблії</a>
+                        <a href="/pages/paintings.html" class="dropdown-item">🖼️ Картини</a>
+                        <a href="/pages/clocks.html" class="dropdown-item">🕐 Годинники</a>
+                        <a href="/pages/books.html" class="dropdown-item">📚 Книги</a>
+                        <a href="/pages/games.html" class="dropdown-item">🎲 Ігри</a>
+                        <a href="/pages/cups.html" class="dropdown-item">☕ Чашки</a>
+                    </div>
+                </div>
+                <a href="#products" class="navbar__link">Товари</a>
+                <a href="#about" class="navbar__link">Про нас</a>
+                <a href="#contact" class="navbar__link">Контакти</a>
+            </nav>
+    
+            <!-- Right controls -->
+            <div class="navbar__controls">
+                <!-- Theme toggle -->
+                <button class="theme-toggle" id="themeToggle" aria-label="Змінити тему" title="Змінити тему">
+                    <span class="theme-toggle__icon theme-toggle__sun">☀️</span>
+                    <span class="theme-toggle__icon theme-toggle__moon">🌙</span>
+                    <span class="theme-toggle__track"></span>
+                </button>
+    
+                <!-- Cart button -->
+                <button class="cart-btn" id="cartBtn" aria-label="Кошик">
+                    <svg class="cart-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 01-8 0" />
+                    </svg>
+                    <span class="cart-btn__count" id="cartCount">0</span>
+                </button>
+    
+                <!-- NEW: Auth button -->
+                <button class="auth-btn" id="authBtn" aria-label="Увійти">
+                    <svg class="auth-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 3h6v6M14 10l7-7M5 3h6v6M4 10l7-7M15 21h6v-6M14 14l7 7M5 21h6v-6M4 14l7 7" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                    <span class="auth-btn__text" id="authBtnText">Увійти</span>
+                </button>
+    
+                <!-- Burger -->
+                <button class="burger" id="burgerBtn" aria-label="Меню">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== ОСНОВНИЙ БЛОК АВТОРИЗАЦІЇ ===== -->
+    <main class="auth-page">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Вхід</button>
+                    <button class="auth-tab" data-tab="register">Реєстрація</button>
+                </div>
+
+                <!-- Форма входу -->
+                <div class="auth-panel" id="loginPanel">
+                    <form id="loginForm" class="auth-form">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginEmail" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="password" id="loginPassword" required placeholder="••••••">
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full">Увійти</button>
+                    </form>
+                </div>
+
+                <!-- Форма реєстрації -->
+                <div class="auth-panel" id="registerPanel" style="display: none;">
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ім'я</label>
+                                <input type="text" id="regFirstName" placeholder="Іван">
+                            </div>
+                            <div class="form-group">
+                                <label>Прізвище</label>
+                                <input type="text" id="regLastName" placeholder="Петренко">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="regEmail" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Телефон</label>
+                            <input type="tel" id="regPhone" placeholder="+380 99 123 4567">
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="password" id="regPassword" required placeholder="мінімум 6 символів">
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full">Зареєструватися</button>
+                    </form>
+                </div>
+
+                <!-- Соціальний вхід -->
+                <div class="social-auth">
+                    <div class="social-divider">або увійти через</div>
+                    <div class="social-buttons">
+                        <button class="social-btn google" id="googleLogin">
+                            <span class="social-icon">G</span> Google
+                        </button>
+                        <button class="social-btn facebook" id="facebookLogin">
+                            <span class="social-icon">f</span> Facebook
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== ФУТЕР (той самий) ===== -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer__inner">
+            <div class="footer__brand">
+                <span class="navbar__logo-icon">✝</span>
+                <span>Благодать Крамниця</span>
+            </div>
+            <p class="footer__copy">© 2026 Благодать Крамниця. Усі права захищені.</p>
+            <div class="footer__socials">
+                <a href="https://invite.viber.com/?g2=AQBR63HLOyLWw0vEQwInxoDgI3SpdBgbaNMeOcOye0Ckyi1RnixnKnYAZDemlYao"
+                    class="footer__social" aria-label="Viber"><img
+                        src="img/244-2440470_viber-icon-logo-transparent-png-viber-icon.png" alt="Viber"></a>
+                <a href="https://www.instagram.com/blagodat_777?igsh=NHhqNDVsM3l3OHJv" class="footer__social"
+                    aria-label="Instagram"><img src="img/Instagram_icon.png" alt="Instagram"></a>
+                <a href="https://t.me/+_62Sdk7I1_ZiODdi" class="footer__social" aria-label="Telegram"><img
+                        src="img/Telegram_logo.svg.png" alt="Telegram"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

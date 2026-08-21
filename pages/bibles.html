@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Біблії — Благодать Крамничка</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/category.css" />
+    <link rel="icon" href="../assests/favicon/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+
+    <!-- ====== НАВІГАЦІЯ ====== -->
+    <header class="navbar" id="navbar">
+        <div class="navbar__inner">
+            <a href="../index.html" class="navbar__logo">
+                <img src="../assests/favicon/logo.png" alt="Логотип" class="navbar__logo-img">
+                <span class="navbar__logo-text">Благoдать<br><em>Крaмниця</em></span>
+            </a>
+            <nav class="navbar__nav" id="navMenu">
+                <div class="navbar__dropdown">
+                    <a href="#" class="navbar__link dropdown-trigger">Категорії ▼</a>
+                    <div class="dropdown-menu">
+                        <a href="/pages/bibles.html" class="dropdown-item">📖 Біблії</a>
+                        <a href="/pages/paintings.html" class="dropdown-item">🖼️ Картини</a>
+                        <a href="/pages/clocks.html" class="dropdown-item">🕐 Годинники</a>
+                        <a href="/pages/books.html" class="dropdown-item">📚 Книги</a>
+                        <a href="/pages/games.html" class="dropdown-item">🎲 Ігри</a>
+                        <a href="/pages/cups.html" class="dropdown-item">☕ Чашки</a>
+                    </div>
+                </div>
+                <a href="#products" class="navbar__link">Товари</a>
+                <a href="#about" class="navbar__link">Про нас</a>
+                <a href="#contact" class="navbar__link">Контакти</a>
+            </nav>
+            <div class="navbar__controls">
+                <button class="theme-toggle" id="themeToggle" aria-label="Змінити тему">
+                    <span class="theme-toggle__icon theme-toggle__sun">☀️</span>
+                    <span class="theme-toggle__icon theme-toggle__moon">🌙</span>
+                    <span class="theme-toggle__track"></span>
+                </button>
+                <button class="cart-btn" id="cartBtn" aria-label="Кошик">
+                    <svg class="cart-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 01-8 0" />
+                    </svg>
+                    <span class="cart-btn__count" id="cartCount">0</span>
+                </button>
+                <button class="burger" id="burgerBtn" aria-label="Меню">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== ГЕРОЙ ====== -->
+    <section class="hero" style="min-height: 40vh; padding: 5rem 1.5rem 2rem;">
+        <div class="hero__bg-pattern"></div>
+        <div class="hero__content">
+            <p class="hero__eyebrow">✦ Святе Письмо ✦</p>
+            <h1 class="hero__title">Священні<br><span class="hero__title-accent">Біблії</span></h1>
+            <p class="hero__subtitle">Видання для дому, подарунків та щоденного читання</p>
+        </div>
+    </section>
+
+    <!-- ====== ТОВАРИ ====== -->
+    <section class="products section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Асортимент</p>
+                <h2 class="section-title">Біблії</h2>
+            </div>
+
+            <!-- Блок пошуку -->
+            <div class="category-search-section">
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Пошук за назвою..." autocomplete="off">
+                    <button class="clear-search" id="clearSearch" aria-label="Очистити">✖</button>
+                </div>
+                <div class="products-counter">
+                    📖 Знайдено: <span id="resultsCount">0</span> / <span id="totalCount">0</span>
+                </div>
+            </div>
+        <!-- ====== ФІЛЬТРИ ====== -->
+        <div class="filters-section">
+            <div class="filters-title">🔍 Фільтри</div>
+            <div class="filters-grid">
+        
+                <!-- Фільтр: Ціна -->
+                <div class="filter-group">
+                    <div class="filter-label">💰 Ціна</div>
+                    <div class="price-range">
+                        <div class="price-inputs">
+                            <input type="number" id="priceMin" class="price-input" placeholder="від" value="0">
+                            <span class="price-separator">—</span>
+                            <input type="number" id="priceMax" class="price-input" placeholder="до" value="2000">
+                        </div>
+                        <div class="slider-container" id="sliderContainer">
+                            <div class="slider-track" id="sliderTrack"></div>
+                            <div class="slider-min" id="sliderMin"></div>
+                            <div class="slider-max" id="sliderMax"></div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Фільтр: Дитяча література -->
+                <div class="filter-group">
+                    <div class="filter-label">📖 Категорія</div>
+                    <div class="filter-checkboxes">
+                        <label class="filter-checkbox" data-filter="children">
+                            <input type="checkbox" value="children">
+                            <span>👶 Дитяча література</span>
+                        </label>
+                    </div>
+                </div>
+        
+                <!-- Фільтр: Переклади -->
+                <div class="filter-group">
+                    <div class="filter-label">📜 Переклад</div>
+                    <div class="filter-checkboxes" id="translationsFilter">
+                        <label class="filter-checkbox" data-filter="cuv">
+                            <input type="checkbox" value="cuv">
+                            <span>CUV</span>
+                        </label>
+                        <label class="filter-checkbox" data-filter="ogienko">
+                            <input type="checkbox" value="ogienko">
+                            <span>Огієнка</span>
+                        </label>
+                        <label class="filter-checkbox" data-filter="turkonjak">
+                            <input type="checkbox" value="turkonjak">
+                            <span>Турконяка</span>
+                        </label>
+                        <label class="filter-checkbox" data-filter="modern">
+                            <input type="checkbox" value="modern">
+                            <span>Сучасний переклад</span>
+                        </label>
+                    </div>
+                </div>
+        
+            </div>
+            <div class="filter-actions">
+                <button class="filter-btn-apply" id="applyFilters">Застосувати</button>
+                <button class="filter-btn-reset" id="resetFilters">Скинути</button>
+            </div>
+        </div>
+
+            <!-- Сітка товарів -->
+            <div class="products__grid" id="productsGrid">
+                <!-- Товари будуть згенеровані тут за допомогою JavaScript -->
+            </div>
+        </div>
+        
+    </section>
+
+    <!-- ====== ФУТЕР ====== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">✝ Благодать Крамниця</div>
+                <p class="footer__copy">© 2026 Благодать Крамниця. Усі права захищені.</p>
+                <div class="footer__socials">
+                    <a href="https://invite.viber.com/?g2=AQBR63HLOyLWw0vEQwInxoDgI3SpdBgbaNMeOcOye0Ckyi1RnixnKnYAZDemlYao" class="footer__social" aria-label="Viber"><img src="/img/244-2440470_viber-icon-logo-transparent-png-viber-icon.png" alt="Viber"></a>
+                    <a href="https://www.instagram.com/blagodat_777?igsh=NHhqNDVsM3l3OHJv" class="footer__social" aria-label="Instagram"><img src="/img/Instagram_icon.png" alt="Instagram"></a>
+                    <a href="https://t.me/+_62Sdk7I1_ZiODdi" class="footer__social" aria-label="Telegram"><img src="/img/Telegram_logo.svg.png" alt="Telegram"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ====== КОШИК (HTML) ====== -->
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-sidebar__header">
+            <h3>🛒 Кошик</h3>
+            <button class="cart-sidebar__close" id="cartClose" aria-label="Закрити">&times;</button>
+        </div>
+        <div class="cart-sidebar__body" id="cartBody">
+            <div class="cart-empty" id="cartEmpty">
+                <p>😔 Кошик порожній</p>
+                <p class="cart-empty__sub">Додайте товари, щоб продовжити</p>
+            </div>
+            <ul class="cart-items" id="cartItems"></ul>
+        </div>
+        <div class="cart-sidebar__footer" id="cartFooter">
+            <div class="cart-total">
+                <span>Разом:</span>
+                <strong id="cartTotal">0 ₴</strong>
+            </div>
+            <button class="btn btn--primary btn--full">Оформити замовлення</button>
+        </div>
+    </aside>
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="toast" id="toast"></div>
+    <button class="back-to-top" id="backToTop" aria-label="Вгору">↑</button>
+
+    <!-- ====== ПІДКЛЮЧЕННЯ СКРИПТІВ ====== -->
+    <script src="../data.js"></script>
+    <script src ="../js/scripts.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/quickview.js"></script>
+    <script src="../js/render.js"></script>
+    <script src="../js/filters.js"></script>
+
+
+    <!-- Локальний скрипт для теми, бургера та пошуку -->
+    <script>
+        
+        (function () {
+            // Тема
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlEl = document.documentElement;
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            htmlEl.setAttribute('data-theme', savedTheme);
+
+            themeToggle?.addEventListener('click', () => {
+                const current = htmlEl.getAttribute('data-theme');
+                const next = current === 'light' ? 'dark' : 'light';
+                htmlEl.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+
+            // Бургер меню
+            const burgerBtn = document.getElementById('burgerBtn');
+            const navMenu = document.getElementById('navMenu');
+            burgerBtn?.addEventListener('click', () => {
+                navMenu.classList.toggle('open');
+                burgerBtn.classList.toggle('open');
+            });
+
+            // Navbar скрол
+            window.addEventListener('scroll', () => {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 20) {
+                    navbar?.classList.add('scrolled');
+                } else {
+                    navbar?.classList.remove('scrolled');
+                }
+            });
+
+            // Back to top
+            const backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                backToTop?.classList.toggle('visible', window.scrollY > 400);
+            });
+            backToTop?.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // ========== ПОШУК НА СТОРІНЦІ ==========
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearch');
+            const resultsSpan = document.getElementById('resultsCount');
+            const totalSpan = document.getElementById('totalCount');
+            const productCards = document.querySelectorAll('.product-card');
+
+            totalSpan.textContent = productCards.length;
+            resultsSpan.textContent = productCards.length;
+
+            function updateSearch() {
+                const term = searchInput.value.trim().toLowerCase();
+                let visible = 0;
+
+                productCards.forEach(card => {
+                    const name = card.querySelector('.product-card__name')?.textContent?.toLowerCase() || '';
+                    const matches = term === '' || name.includes(term);
+                    card.classList.toggle('hidden', !matches);
+                    if (matches) visible++;
+                });
+
+                resultsSpan.textContent = visible;
+                clearBtn.style.display = term ? 'flex' : 'none';
+            }
+
+            let debounce;
+            searchInput?.addEventListener('input', () => {
+                clearTimeout(debounce);
+                debounce = setTimeout(updateSearch, 200);
+            });
+
+            clearBtn?.addEventListener('click', () => {
+                searchInput.value = '';
+                updateSearch();
+                searchInput.focus();
+            });
+        })();
+        </script>
+        <script>
+         document.addEventListener('DOMContentLoaded', () => {
+                renderCategoryProducts('bibles');   // назва категорії відповідно
+                initCategorySearch();
+
+                // ========== ОБРОБКА ХЕША ДЛЯ ПЕРЕХОДУ ДО ТОВАРУ ==========
+                function handleHash() {
+                    const hash = window.location.hash;
+                    if (hash && hash.startsWith('#product-')) {
+                        const productId = hash.replace('#product-', '');
+                        // Чекаємо трохи, поки товари відрендеряться
+                        setTimeout(() => {
+                            const targetCard = document.querySelector(`.product-card[data-id="${productId}"]`);
+                            if (targetCard) {
+                                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                targetCard.classList.add('search-highlight');
+                                setTimeout(() => {
+                                    targetCard.classList.remove('search-highlight');
+                                }, 2000);
+                            } else {
+                                console.warn('Товар з id', productId, 'не знайдено на сторінці');
+                            }
+                        }, 500);
+                    }
+                }
+
+                // Викликаємо обробник при завантаженні та при зміні хеша
+                handleHash();
+                window.addEventListener('hashchange', handleHash);
+            });
+        </script>
+    </script>
+</body>
+
+</html>
