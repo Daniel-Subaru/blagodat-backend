@@ -2,6 +2,11 @@
 // render.js — рендеринг товарів з data.js
 // ============================================
 
+function resolveAssetUrl(url) {
+    if (!url || /^(data:|https?:|\/)/.test(url)) return url;
+    return `/${url}`;
+}
+
 // Отримуємо HTML для статусу наявності (якщо функція не в data.js)
 function getStockHtml(product) {
     if (!product.stock || product.stock <= 0) {
@@ -45,7 +50,7 @@ function renderCategoryProducts(categoryKey) {
         }
         
         // Отримуємо зображення
-        const imageUrl = product.image || (product.images && product.images[0]) || '';
+        const imageUrl = resolveAssetUrl(product.image || (product.images && product.images[0]) || '');
         
         return `
             <div class="product-card" data-category="${product.category}" data-id="${product.id}" data-price="${finalPrice}">
@@ -106,7 +111,7 @@ function renderPopularProducts(limit = 8) {
             priceHtml = `<span style="font-weight:800;">${finalPrice} ₴</span>`;
         }
         
-        const imageUrl = product.image || (product.images && product.images[0]) || '';
+        const imageUrl = resolveAssetUrl(product.image || (product.images && product.images[0]) || '');
         
         return `
             <div class="product-card" data-category="${product.category}" data-id="${product.id}" data-price="${finalPrice}">
