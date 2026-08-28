@@ -64,20 +64,23 @@ const navMenu = document.getElementById('navMenu');
 burgerBtn?.addEventListener('click', () => {
   const isOpen = navMenu.classList.toggle('open');
   burgerBtn.classList.toggle('open', isOpen);
-  burgerBtn.setAttribute('aria-expanded', isOpen);
+  burgerBtn.setAttribute('aria-expanded', String(isOpen));
 });
 
-navMenu?.querySelectorAll('.navbar__link').forEach(link => {
+navMenu?.querySelectorAll('.navbar__link, .dropdown-item').forEach(link => {
   link.addEventListener('click', () => {
     navMenu.classList.remove('open');
-    burgerBtn.classList.remove('open');
+    burgerBtn?.classList.remove('open');
+    burgerBtn?.setAttribute('aria-expanded', 'false');
   });
 });
 
 document.addEventListener('click', (e) => {
-  if (navMenu?.classList.contains('open') && !navbar?.contains(e.target)) {
+  const clickedInsideNavbar = navbar?.contains(e.target);
+  if (navMenu?.classList.contains('open') && !clickedInsideNavbar) {
     navMenu.classList.remove('open');
     burgerBtn?.classList.remove('open');
+    burgerBtn?.setAttribute('aria-expanded', 'false');
   }
 });
 

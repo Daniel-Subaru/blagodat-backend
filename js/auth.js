@@ -116,9 +116,27 @@ if (themeToggle) {
 // Бургер меню (якщо є)
 const burgerBtn = document.getElementById('burgerBtn');
 const navMenu = document.getElementById('navMenu');
-if (burgerBtn) {
+if (burgerBtn && navMenu) {
+    const closeMenu = () => {
+        navMenu.classList.remove('open');
+        burgerBtn.classList.remove('open');
+        burgerBtn.setAttribute('aria-expanded', 'false');
+    };
+
     burgerBtn.addEventListener('click', () => {
-        navMenu.classList.toggle('open');
-        burgerBtn.classList.toggle('open');
+        const isOpen = navMenu.classList.toggle('open');
+        burgerBtn.classList.toggle('open', isOpen);
+        burgerBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    navMenu.querySelectorAll('.navbar__link, .dropdown-item').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', (event) => {
+        const clickedInsideNavbar = burgerBtn.closest('.navbar')?.contains(event.target);
+        if (navMenu.classList.contains('open') && !clickedInsideNavbar) {
+            closeMenu();
+        }
     });
 }

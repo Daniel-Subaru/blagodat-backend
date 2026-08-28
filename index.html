@@ -60,14 +60,14 @@
           <span class="cart-btn__count" id="cartCount">0</span>
         </button>
 
-        <!-- NEW: Auth button -->
-        <button src="/pages/login.html" class="auth-btn" id="authBtn" aria-label="Увійти">
+        <!-- Auth button -->
+        <a href="/pages/login.html" class="auth-btn" id="authBtn" aria-label="Увійти">
             <svg class="auth-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M15 3h6v6M14 10l7-7M5 3h6v6M4 10l7-7M15 21h6v-6M14 14l7 7M5 21h6v-6M4 14l7 7" />
                 <circle cx="12" cy="12" r="3" />
             </svg>
             <span class="auth-btn__text" id="authBtnText">Увійти</span>
-        </button>
+        </a>
 
         <!-- Burger -->
         <button class="burger" id="burgerBtn" aria-label="Меню">
@@ -400,6 +400,11 @@
             </div>
         `;
             }).join('');
+
+            // The homepage uses its own renderer, so wire its dynamic buttons too.
+            if (typeof attachProductEvents === 'function') {
+                attachProductEvents();
+            }
         }
 </script>
 <script>

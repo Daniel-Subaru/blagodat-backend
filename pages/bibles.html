@@ -203,11 +203,12 @@
 
     <!-- ====== ПІДКЛЮЧЕННЯ СКРИПТІВ ====== -->
     <script src="../data.js"></script>
-    <script src ="../js/scripts.js"></script>
+    <script src="../js/script.js"></script>
     <script src="../js/cart.js"></script>
     <script src="../js/quickview.js"></script>
     <script src="../js/render.js"></script>
     <script src="../js/filters.js"></script>
+    <script src="../js/category-search.js"></script>
 
 
     <!-- Локальний скрипт для теми, бургера та пошуку -->
@@ -225,14 +226,6 @@
                 const next = current === 'light' ? 'dark' : 'light';
                 htmlEl.setAttribute('data-theme', next);
                 localStorage.setItem('theme', next);
-            });
-
-            // Бургер меню
-            const burgerBtn = document.getElementById('burgerBtn');
-            const navMenu = document.getElementById('navMenu');
-            burgerBtn?.addEventListener('click', () => {
-                navMenu.classList.toggle('open');
-                burgerBtn.classList.toggle('open');
             });
 
             // Navbar скрол

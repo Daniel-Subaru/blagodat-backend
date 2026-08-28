@@ -42,6 +42,12 @@
         
         // Фільтр перекладів
         translationCheckboxes = document.querySelectorAll('#translationsFilter input');
+
+        if (!childrenCheckbox && translationCheckboxes.length === 0) {
+            bindEvents();
+            updatePriceRange();
+            return;
+        }
         
         // Оновлюємо діапазон цін з товарів
         updatePriceRange();

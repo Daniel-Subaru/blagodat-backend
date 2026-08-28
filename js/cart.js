@@ -58,7 +58,7 @@
         
         // НОВЕ — отримуємо фото товара з data.js
         const product = getProductById(productId);  // функція з data.js
-        const imageUrl = product?.image || product?.images?.[0] || '';
+        const imageUrl = resolveAssetUrl(product?.image || product?.images?.[0] || '');
         if (imageUrl) {
             const img = new Image();
             img.src = imageUrl;
@@ -270,6 +270,13 @@
         if (cartOverlay) {
             cartOverlay.removeEventListener('click', closeCart);
             cartOverlay.addEventListener('click', closeCart);
+        }
+
+        const checkoutBtn = document.querySelector('.cart-sidebar__footer .btn--full');
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener('click', () => {
+                window.location.href = '/checkout.html';
+            });
         }
     }
     
