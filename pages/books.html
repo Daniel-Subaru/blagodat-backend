@@ -84,7 +84,7 @@
                 <div class="products-counter">🕐 Знайдено: <span id="resultsCount">0</span> / <span
                         id="totalCount">0</span></div>
             </div>
-            <div class="filters-section"><div class="filters-title">🔍 Фільтри</div><div class="filters-grid"><div class="filter-group"><div class="filter-label">💰 Ціна</div><div class="price-inputs"><input type="number" id="priceMin" class="price-input" placeholder="від"><span class="price-separator">—</span><input type="number" id="priceMax" class="price-input" placeholder="до"></div></div><div class="filter-group"><div class="filter-label">📦 Наявність</div><label class="filter-checkbox"><input type="checkbox" id="onlyInStock"><span>✅ Лише в наявності</span></label></div></div><div class="filter-actions"><button class="filter-btn-apply" id="applyFilters">Застосувати</button><button class="filter-btn-reset" id="resetFilters">Скинути</button></div></div>
+            <div class="filters-section"><div class="filters-title">🔍 Фільтри</div><div class="filters-grid"><div class="filter-group"><div class="filter-label">💰 Ціна</div><div class="price-range"><div class="price-inputs"><input type="number" id="priceMin" class="price-input" placeholder="від"><span class="price-separator">—</span><input type="number" id="priceMax" class="price-input" placeholder="до"></div><div class="slider-container" id="sliderContainer"><div class="slider-track" id="sliderTrack"></div><div class="slider-min" id="sliderMin" tabindex="0"></div><div class="slider-max" id="sliderMax" tabindex="0"></div></div></div></div><div class="filter-group"><div class="filter-label">📦 Наявність</div><label class="filter-checkbox"><input type="checkbox" id="onlyInStock"><span>✅ Лише в наявності</span></label></div></div><div class="filter-actions"><button class="filter-btn-apply" id="applyFilters">Застосувати</button><button class="filter-btn-reset" id="resetFilters">Скинути</button></div></div>
             <div class="products__grid" id="productsGrid"></div>
         </div>
     </section>
@@ -128,10 +128,10 @@
 
     <script src="../data.js"></script>
     <script src="../js/cart.js"></script>
-    <script src="../js/quickview.js"></script>
     <script src="../js/render.js"></script>
     <script src="../js/category-search.js"></script>
     <script src="../js/script.js"></script>
+    <script src="../js/quickview.js"></script>
 
 
     <script>

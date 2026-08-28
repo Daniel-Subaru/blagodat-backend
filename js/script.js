@@ -35,7 +35,8 @@ const htmlEl = document.documentElement;
 const savedTheme = localStorage.getItem('theme') || 'light';
 htmlEl.setAttribute('data-theme', savedTheme);
 
-themeToggle?.addEventListener('click', () => {
+themeToggle?.addEventListener('click', (event) => {
+  event.stopImmediatePropagation();
   const current = htmlEl.getAttribute('data-theme');
   const next = current === 'light' ? 'dark' : 'light';
   htmlEl.setAttribute('data-theme', next);
@@ -67,7 +68,7 @@ burgerBtn?.addEventListener('click', () => {
   burgerBtn.setAttribute('aria-expanded', String(isOpen));
 });
 
-navMenu?.querySelectorAll('.navbar__link, .dropdown-item').forEach(link => {
+navMenu?.querySelectorAll('.navbar__link:not(.dropdown-trigger), .dropdown-item').forEach(link => {
   link.addEventListener('click', () => {
     navMenu.classList.remove('open');
     burgerBtn?.classList.remove('open');
@@ -349,8 +350,12 @@ function quickViewHandler(e) {
   const card = e.currentTarget.closest('.product-card');
   if (!card) return;
   const id = card.dataset.id;
-  if (id && productData[id]) {
-    openQuickView(id);
+  if (id) {
+    if (typeof window.openQuickView === 'function') {
+      window.openQuickView(id);
+    } else if (productData[id]) {
+      openQuickView(id);
+    }
   }
 }
 
@@ -416,6 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const observerForQuick = new MutationObserver(() => {
+  buildProductData();
   initQuickViewButtons();
 });
 observerForQuick.observe(document.body, { childList: true, subtree: true });
@@ -436,11 +442,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const trigger = document.querySelector('.dropdown-trigger');
     if (!dropdown || !trigger) return;
 
+    trigger.setAttribute('aria-haspopup', 'true');
+    trigger.setAttribute('aria-expanded', 'false');
+
     // Для мобільних: клік відкриває/закриває меню
     trigger.addEventListener('click', function(e) {
         if (window.innerWidth <= 768) {
             e.preventDefault();
-            dropdown.classList.toggle('open');
+            const isOpen = dropdown.classList.toggle('open');
+            trigger.setAttribute('aria-expanded', String(isOpen));
         }
     });
 
@@ -448,6 +458,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
         if (window.innerWidth <= 768 && !dropdown.contains(e.target)) {
             dropdown.classList.remove('open');
+            trigger.setAttribute('aria-expanded', 'false');
         }
+    });
+
+    dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+            dropdown.classList.remove('open');
+            trigger.setAttribute('aria-expanded', 'false');
+        });
     });
 });

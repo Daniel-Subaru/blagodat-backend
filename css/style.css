@@ -1547,6 +1547,47 @@ button:focus-visible {
     min-width: 42px;
     min-height: 42px;
   }
+
+  .quickview-modal {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .quickview-modal .modal-body {
+    height: 100dvh;
+    max-height: none;
+    padding: 4.5rem 1rem 1.25rem;
+    gap: 1rem;
+  }
+
+  .quickview-modal .modal-carousel {
+    width: 100%;
+  }
+
+  .quickview-modal .carousel-main {
+    aspect-ratio: 1 / 1;
+    max-height: 42dvh;
+  }
+
+  .quickview-modal .modal-info {
+    min-width: 0;
+    padding: 0;
+    gap: 0.65rem;
+    overflow: visible;
+  }
+
+  .quickview-modal .modal-description {
+    max-height: 18dvh;
+    overflow-y: auto;
+  }
+
+  .quickview-modal .modal-add-to-cart {
+    width: 100%;
+    min-height: 3rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1592,6 +1633,13 @@ button:focus-visible {
   }
 
   .cart-sidebar { width: 100vw; }
+
+  .container { padding-left: 1rem; padding-right: 1rem; }
+  .section { padding: 2.5rem 0; }
+  .navbar__inner { min-height: 60px; }
+  .hero { min-height: 78vh; padding-top: 5rem; }
+  .hero__eyebrow { font-size: 0.7rem; letter-spacing: 0.16em; }
+  .hero__actions .btn { max-width: none; }
 }
 
 /* Always show buy button on touch devices */
@@ -1996,6 +2044,29 @@ button:focus-visible {
         width: 28px;
         height: 28px;
         font-size: 0.9rem;
+    }
+
+    .quickview-modal {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        border-radius: 0;
+        transform: none;
+    }
+
+    .quickview-modal .modal-body {
+        box-sizing: border-box;
+        height: 100%;
+        max-height: none;
+        padding: 4.5rem 1rem 1.25rem;
+        overflow-y: auto;
+    }
+
+    .quickview-modal .carousel-main {
+        max-height: 42dvh;
     }
 }
 
@@ -2632,8 +2703,27 @@ button:focus-visible {
     .cart-btn,
     .burger,
     .theme-toggle {
-        min-height: 44px !important;
-        min-width: 44px !important;
+        width: 52px !important;
+        height: 30px !important;
+        min-height: 30px !important;
+        min-width: 52px !important;
+        padding: 0 !important;
+        border-radius: 999px !important;
+    }
+
+    .theme-toggle__track {
+        width: 24px !important;
+        height: 24px !important;
+        top: 2px !important;
+        left: 2px !important;
+    }
+
+    [data-theme="dark"] .theme-toggle__track {
+        transform: translateX(22px) !important;
+    }
+
+    .theme-toggle__icon {
+        font-size: 0.7rem !important;
     }
 }
 
