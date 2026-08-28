@@ -105,7 +105,8 @@ if (themeToggle) {
     const htmlEl = document.documentElement;
     const savedTheme = localStorage.getItem('theme') || 'light';
     htmlEl.setAttribute('data-theme', savedTheme);
-    themeToggle.addEventListener('click', () => {
+    themeToggle.addEventListener('click', (event) => {
+        event.stopImmediatePropagation();
         const current = htmlEl.getAttribute('data-theme');
         const next = current === 'light' ? 'dark' : 'light';
         htmlEl.setAttribute('data-theme', next);
@@ -130,7 +131,9 @@ if (burgerBtn && navMenu) {
     });
 
     navMenu.querySelectorAll('.navbar__link, .dropdown-item').forEach(link => {
-        link.addEventListener('click', closeMenu);
+        if (!link.classList.contains('dropdown-trigger')) {
+            link.addEventListener('click', closeMenu);
+        }
     });
 
     document.addEventListener('click', (event) => {
@@ -139,4 +142,21 @@ if (burgerBtn && navMenu) {
             closeMenu();
         }
     });
+
+    const dropdown = navMenu.querySelector('.navbar__dropdown');
+    const trigger = navMenu.querySelector('.dropdown-trigger');
+    if (dropdown && trigger) {
+        trigger.setAttribute('aria-haspopup', 'true');
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.addEventListener('click', (event) => {
+            if (window.innerWidth <= 768) {
+                event.preventDefault();
+                const isOpen = dropdown.classList.toggle('open');
+                trigger.setAttribute('aria-expanded', String(isOpen));
+            }
+        });
+        dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', closeMenu);
+        });
+    }
 }

@@ -15,14 +15,14 @@
     <link rel="icon" href="/assests/favicon/favicon.ico" type="image/x-icon" />
 </head>
 
-<body>
+<body class="auth-layout">
 
     <!-- ===== НАВІГАЦІЯ (така ж, як на головній) ===== -->
     <header class="navbar" id="navbar">
         <div class="navbar__inner">
     
             <!-- Logo -->
-            <a href="#" class="navbar__logo">
+            <a href="/index.html" class="navbar__logo" aria-label="На головну">
                 <img src="/assests/favicon/logo.png" alt="Логотип Благodать Кramниця" class="navbar__logo-img">
                 <span class="navbar__logo-text">Благoдать<br><em>Крaмниця</em></span>
             </a>
@@ -30,7 +30,7 @@
             <!-- Navigation links -->
             <nav class="navbar__nav" id="navMenu">
                 <div class="navbar__dropdown">
-                    <a href="#categories" class="navbar__link dropdown-trigger">Категорії ▼</a>
+                    <a href="#categories" class="navbar__link dropdown-trigger" aria-haspopup="true" aria-expanded="false">Категорії ▼</a>
                     <div class="dropdown-menu">
                         <a href="/pages/bibles.html" class="dropdown-item">📖 Біблії</a>
                         <a href="/pages/paintings.html" class="dropdown-item">🖼️ Картини</a>
@@ -40,9 +40,9 @@
                         <a href="/pages/cups.html" class="dropdown-item">☕ Чашки</a>
                     </div>
                 </div>
-                <a href="#products" class="navbar__link">Товари</a>
-                <a href="#about" class="navbar__link">Про нас</a>
-                <a href="#contact" class="navbar__link">Контакти</a>
+                <a href="/index.html#products" class="navbar__link">Товари</a>
+                <a href="/index.html#about" class="navbar__link">Про нас</a>
+                <a href="/index.html#contact" class="navbar__link">Контакти</a>
             </nav>
     
             <!-- Right controls -->
