@@ -1580,8 +1580,8 @@ button:focus-visible {
   }
 
   .quickview-modal .modal-description {
-    max-height: 18dvh;
-    overflow-y: auto;
+    max-height: none;
+    overflow: visible;
   }
 
   .quickview-modal .modal-add-to-cart {
@@ -1797,9 +1797,16 @@ button:focus-visible {
     gap: 1.5rem;
     overflow-y: auto;
     max-height: calc(90vh - 20px);
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
 }
 
 @media (max-width: 768px) {
+    /* На мобільних скролиться лише .modal-body: вкладені скрол-контейнери
+       (.modal-info, .modal-description) заважають гортанню пальцем, тому
+       їм не задаємо власний overflow/max-height — вони просто течуть
+       всередині єдиного контейнера прокрутки. */
     .modal-body {
         display: flex;
         flex-direction: column;
@@ -1813,13 +1820,13 @@ button:focus-visible {
 
     .modal-info {
         flex: 1;
-        overflow-y: auto;
+        overflow: visible;
         padding: 1rem;
     }
 
     .modal-description {
-        max-height: 200px;
-        overflow-y: auto;
+        max-height: none;
+        overflow: visible;
     }
 }
 
@@ -2063,6 +2070,9 @@ button:focus-visible {
         max-height: none;
         padding: 4.5rem 1rem 1.25rem;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        overscroll-behavior: contain;
     }
 
     .quickview-modal .carousel-main {
@@ -2353,6 +2363,9 @@ button:focus-visible {
         padding: 0.75rem;
         max-height: 85vh;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        overscroll-behavior: contain;
     }
 
     .modal-carousel {
@@ -2365,10 +2378,11 @@ button:focus-visible {
         aspect-ratio: 1 / 1;
     }
 
+    /* Не робимо .modal-info окремим скрол-контейнером — це заважало
+       гортанню на мобільних, коли жест потрапляв у вкладений скрол. */
     .modal-info {
         flex: none;
-        max-height: 40vh;
-        overflow-y: auto;
+        overflow: visible;
         padding-right: 0.5rem;
     }
 
@@ -2383,8 +2397,8 @@ button:focus-visible {
 
     .modal-description {
         font-size: 0.85rem;
-        max-height: 100px;
-        overflow-y: auto;
+        max-height: none;
+        overflow: visible;
     }
 
     .carousel-btn {
@@ -2396,11 +2410,11 @@ button:focus-visible {
 
 @media (max-width: 480px) {
     .modal-info {
-        max-height: 35vh;
+        max-height: none;
     }
 
     .modal-description {
-        max-height: 80px;
+        max-height: none;
     }
 }
 
@@ -2564,12 +2578,13 @@ button:focus-visible {
         margin-bottom: 1.25rem;
     }
 
-    /* Опис на мобільних */
+    /* Опис на мобільних: без власного скролу, щоб гортання пальцем
+       працювало через єдиний контейнер .modal-body */
     .modal-description {
         font-size: 0.9rem !important;
         line-height: 1.5 !important;
-        max-height: 150px !important;
-        overflow-y: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
         padding: 0.5rem 0 !important;
         background: transparent !important;
     }
@@ -2663,11 +2678,13 @@ button:focus-visible {
 /* Для дуже маленьких екранів (iPhone SE, 375px) */
 @media (max-width: 480px) {
     .modal-info {
-        max-height: 40vh !important;
+        max-height: none !important;
+        overflow: visible !important;
     }
 
     .modal-description {
-        max-height: 120px !important;
+        max-height: none !important;
+        overflow: visible !important;
         font-size: 0.85rem !important;
     }
 
