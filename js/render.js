@@ -3,11 +3,14 @@
 // ============================================
 
 function resolveAssetUrl(url) {
-    if (!url || /^(data:|https?:|\/)/.test(url)) return url;
-    return `/${url}`;
+    if (!url) return '';
+    const normalized = String(url).trim().replace(/\\/g, '/');
+    if (/^(data:|https?:|\/|\.\.?\/)/.test(normalized)) {
+        return encodeURI(normalized);
+    }
+    return `/${encodeURI(normalized)}`;
 }
 
-// Отримуємо HTML для статусу наявності (якщо функція не в data.js)
 function getStockHtml(product) {
     if (!product.stock || product.stock <= 0) {
         return '<div class="stock-badge out-of-stock">❌ Немає в наявності</div>';
@@ -18,12 +21,13 @@ function getStockHtml(product) {
     }
 }
 
-// Рендеринг товарів на сторінці категорії
 function renderCategoryProducts(categoryKey) {
     const container = document.getElementById('productsGrid');
     if (!container) return;
     
-    const products = getProductsByCategory(categoryKey);
+    const products = (typeof getProductsByCategory === 'function' ? getProductsByCategory(categoryKey) : [])
+        .map(product => window.normalizeProduct ? window.normalizeProduct(product) : product)
+        .filter(Boolean);
     const totalSpan = document.getElementById('totalCount');
     const resultsSpan = document.getElementById('resultsCount');
     
@@ -40,7 +44,6 @@ function renderCategoryProducts(categoryKey) {
         const badgeHtml = getBadgeHtml(product);
         const starsHtml = getStarsHtml(product.rating);
         
-        // Формуємо HTML ціни зі знижкою
         let priceHtml = '';
         if (product.discount && product.discount > 0) {
             priceHtml = `<span style="text-decoration:line-through; font-size:0.8rem; margin-right:6px;">${product.originalPrice} ₴</span> 
@@ -49,7 +52,6 @@ function renderCategoryProducts(categoryKey) {
             priceHtml = `<span style="font-weight:800;">${finalPrice} ₴</span>`;
         }
         
-        // Отримуємо зображення
         const imageUrl = resolveAssetUrl(product.image || (product.images && product.images[0]) || '');
         
         return `
@@ -69,8 +71,9 @@ function renderCategoryProducts(categoryKey) {
                 <div class="product-card__body">
                     <p class="product-card__cat">${product.categoryName}</p>
                     <h3 class="product-card__name">${product.name}</h3>
+                    ${product.category === 'books' && product.author ? `<div class="product-card__author">✍️ Автор: ${product.author}</div>` : ''}
                     <div class="product-card__stars">${starsHtml}</div>
-                    ${product.sku ? `<div class="product-sku">Артикул: ${product.sku}</div>` : ''}
+                    ${product.sku ? `<div class="product-sku">📦 Артикул: ${product.sku}</div>` : ''}
                     <div class="product-card__footer">
                         <div class="product-card__price">${priceHtml}</div>
                         ${getStockHtml(product)}
@@ -86,13 +89,13 @@ function renderCategoryProducts(categoryKey) {
     attachProductEvents();
 }
 
-// Рендеринг популярних товарів на головній сторінці
 function renderPopularProducts(limit = 8) {
     const container = document.getElementById('productsGrid');
     if (!container) return;
     
-    const allProducts = getAllProducts();
-    // Беремо популярні товари (isHit) або перші N
+    const allProducts = (typeof getAllProducts === 'function' ? getAllProducts() : [])
+        .map(product => window.normalizeProduct ? window.normalizeProduct(product) : product)
+        .filter(Boolean);
     let popular = allProducts.filter(p => p.isHit).slice(0, limit);
     if (popular.length < limit) {
         popular = allProducts.slice(0, limit);
@@ -130,8 +133,9 @@ function renderPopularProducts(limit = 8) {
                 <div class="product-card__body">
                     <p class="product-card__cat">${product.categoryName}</p>
                     <h3 class="product-card__name">${product.name}</h3>
+                    ${product.category === 'books' && product.author ? `<div class="product-card__author">✍️ Автор: ${product.author}</div>` : ''}
                     <div class="product-card__stars">${starsHtml}</div>
-                    ${product.sku ? `<div class="product-sku">Артикул: ${product.sku}</div>` : ''}
+                    ${product.sku ? `<div class="product-sku">📦 Артикул: ${product.sku}</div>` : ''}
                     <div class="product-card__footer">
                         <div class="product-card__price">${priceHtml}</div>
                         ${getStockHtml(product)}
@@ -147,22 +151,18 @@ function renderPopularProducts(limit = 8) {
     attachProductEvents();
 }
 
-// Прив'язка подій до кнопок
 function attachProductEvents() {
-    // Кнопки "В кошик"
     document.querySelectorAll('.product-card__buy').forEach(btn => {
         btn.removeEventListener('click', buyHandler);
         btn.addEventListener('click', buyHandler);
     });
     
-    // Кнопки "Швидкий перегляд"
     document.querySelectorAll('.product-card__quick').forEach(btn => {
         btn.removeEventListener('click', quickViewHandler);
         btn.addEventListener('click', quickViewHandler);
     });
 }
 
-// Обробник додавання в кошик
 function buyHandler(e) {
     e.stopPropagation();
     const productId = parseInt(e.currentTarget.dataset.id);
@@ -175,7 +175,6 @@ function buyHandler(e) {
     }
 }
 
-// Обробник швидкого перегляду
 function quickViewHandler(e) {
     e.stopPropagation();
     const productId = parseInt(e.currentTarget.dataset.id);
