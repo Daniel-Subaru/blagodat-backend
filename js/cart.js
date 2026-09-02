@@ -42,28 +42,61 @@
         return 0;
     }
     
+    function syncProductStockUI(productId) {
+        const product = getProductById(productId);
+        if (!product) return;
+
+        document.querySelectorAll(`.product-card[data-id="${productId}"]`).forEach(card => {
+            const buyBtn = card.querySelector('.product-card__buy');
+            const stockBadge = card.querySelector('.stock-badge');
+
+            if (buyBtn) {
+                const available = product.stock > 0;
+                buyBtn.disabled = !available;
+                buyBtn.textContent = `🛒 ${available ? 'В кошик' : 'Немає'}`;
+                buyBtn.title = available ? 'Додати в кошик' : 'Товар відсутній';
+            }
+
+            if (stockBadge) {
+                stockBadge.outerHTML = getStockHtml(product);
+            }
+        });
+    }
+
     // ========== ДОДАВАННЯ В КОШИК ==========
     window.addToCart = function(productId, customPrice = null) {
-        // Знаходимо картку товару
         const card = document.querySelector(`.product-card[data-id="${productId}"]`);
         if (!card) {
             console.warn('Товар не знайдено:', productId);
             return;
         }
-        
-        // Отримуємо дані з картки
+
         const name = card.querySelector('.product-card__name')?.textContent || 'Товар';
         const emoji = card.querySelector('.product-card__emoji')?.textContent || '📦';
         const bgColor = card.querySelector('.product-card__img')?.style?.background || '#ddd';
-        
-        // НОВЕ — отримуємо фото товара з data.js
-        const product = getProductById(productId);  // функція з data.js
+        const product = getProductById(productId);
+
+        if (!product) {
+            console.warn('Товар не знайдено в базі даних:', productId);
+            return;
+        }
+
+        const isAlreadyInCart = cart.some(item => item.id == productId);
+        if (product.stock <= 0 && !isAlreadyInCart) {
+            showToast(`❌ "${product.name}" вже немає в наявності`);
+            return;
+        }
+
+        if (product.stock <= 0 && isAlreadyInCart) {
+            showToast(`❌ "${product.name}" більше немає в наявності`);
+            return;
+        }
+
         const imageUrl = resolveAssetUrl(product?.image || product?.images?.[0] || '');
         if (imageUrl) {
             const img = new Image();
             img.src = imageUrl;
             img.onload = () => {
-                // Оновлюємо фон емодзі в кошику, якщо є
                 const cartItem = document.querySelector(`.cart-item[data-item-id="${productId}"] .cart-item__thumb`);
                 if (cartItem) {
                     cartItem.style.background = bgColor;
@@ -71,13 +104,12 @@
                 }
             };
         }
-        // Отримуємо ціну (зі знижкою, якщо є)
+
         let finalPrice = customPrice;
         if (!finalPrice) {
             finalPrice = getPriceFromCard(card);
         }
-        
-        // Перевіряємо чи є товар вже в кошику
+
         const existing = cart.find(item => item.id == productId);
         if (existing) {
             existing.qty++;
@@ -92,10 +124,12 @@
                 qty: 1
             });
         }
-        
+
+        product.stock = Math.max(0, Number(product.stock || 0) - 1);
         saveCart();
         updateCartDisplay();
         updateCartCount();
+        syncProductStockUI(productId);
         showToast(`🛒 "${name}" додано до кошика (${finalPrice} ₴)`);
         animateCartButton();
     };
@@ -103,29 +137,57 @@
     // ========== ВИДАЛЕННЯ З КОШИКА ==========
     window.removeFromCart = function(productId) {
         const item = cart.find(i => i.id == productId);
-        if (item) {
-            showToast(`🗑️ "${item.name}" видалено з кошика`);
+        if (!item) return;
+
+        const product = getProductById(productId);
+        if (product) {
+            const sourceProduct = STORE_DATA && STORE_DATA[productId] ? STORE_DATA[productId] : product;
+            sourceProduct.stock = Math.max(0, Number(sourceProduct.stock || 0) + Number(item.qty || 0));
         }
+
+        showToast(`🗑️ "${item.name}" видалено з кошика`);
         cart = cart.filter(i => i.id != productId);
         saveCart();
         updateCartDisplay();
         updateCartCount();
+        syncProductStockUI(productId);
     };
     
     // ========== ЗМІНА КІЛЬКОСТІ ==========
     window.updateCartQty = function(productId, delta) {
         const item = cart.find(i => i.id == productId);
         if (!item) return;
-        
-        item.qty += delta;
-        if (item.qty <= 0) {
-            removeFromCart(productId);
-            return;
+
+        const product = getProductById(productId);
+        if (!product) return;
+
+        if (delta > 0) {
+            if (product.stock <= 0) {
+                showToast(`❌ "${product.name}" більше немає в наявності`);
+                return;
+            }
+            item.qty += 1;
+            product.stock = Math.max(0, Number(product.stock || 0) - 1);
+        } else {
+            if (item.qty <= 1) {
+                const removedQty = item.qty;
+                product.stock = Math.max(0, Number(product.stock || 0) + removedQty);
+                cart = cart.filter(i => i.id != productId);
+                saveCart();
+                updateCartDisplay();
+                updateCartCount();
+                syncProductStockUI(productId);
+                showToast(`🗑️ "${item.name}" видалено з кошика`);
+                return;
+            }
+            item.qty -= 1;
+            product.stock = Math.max(0, Number(product.stock || 0) + 1);
         }
-        
+
         saveCart();
         updateCartDisplay();
         updateCartCount();
+        syncProductStockUI(productId);
     };
     
     // ========== ОНОВЛЕННЯ ВІДОБРАЖЕННЯ КОШИКА ==========
