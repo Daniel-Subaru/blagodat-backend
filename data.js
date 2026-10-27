@@ -32,20 +32,20 @@ const STORE_DATA = {
     // === БІБЛІЇ (id: 101-199) ===
     101: {
         id: 101,
-        name: "Сучасний переклад Біблії (CUV)",
+        name: "Переклад Івана Огієнка або синодальний переклад 🇺🇦",
         sku: "BIB-001",
         stock: 5,
         category: "bibles",
         categoryName: "Біблії",
-        translation: "cuv",
-        originalPrice: 2500,
+        translation: "ogienko",
+        originalPrice: 920,
         discount: 0,
         rating: 5,
-        image: "/img/Bible/CUV.jpg",
+        image: "/img/Bible/Біблія Огієнка.jpg",
         emoji: "📖",
         bgColor: "#c9b49a",
-        description: "🔸Головний перекладач о. Р. Турконяк 🔸 Шкіряна обкладинка 📏Розмір 18/25 см 🔸Замок 🔸Індекси 🔸Золотий зріз",
-        images: ["/img/Bible/bible_leather.jpg", "/img/Bible/leather.jpg"],
+        description: "📏Розмір 15х20 см.\n🔹Замінник шкіри.\n🔹Індекси.\n🔸На замку \n✨ Золотий зріз сторінок ",
+        images: ["/img/Bible/Біблія Огієнка.jpg"],
         isHit: true
     },
     102: {
