@@ -3,7 +3,8 @@
 // ============================================
 
 (function() {
-  const API_BASE = 'http://localhost:3000/api';
+  // На продакшені задайте window.API_BASE (напр. 'https://api.your-domain.com/api') до підключення скрипта
+  const API_BASE = window.API_BASE || 'http://localhost:3000/api';
   let cartItems = [];
 
   // ========== ЗАВАНТАЖЕННЯ КОШИКА ============
@@ -326,6 +327,19 @@
 
   // ========== ІНІТІАЛІЗАЦІЯ ============
   document.addEventListener('DOMContentLoaded', () => {
+    const paidOrder = new URLSearchParams(window.location.search).get('paid');
+    if (paidOrder) {
+      const container = document.getElementById('checkoutContainer');
+      container.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 40px;">
+          <div style="font-size: 4rem; margin-bottom: 20px;">✅</div>
+          <h2 style="font-size: 2rem; margin-bottom: 10px;">Дякуємо за замовлення!</h2>
+          <p style="margin-bottom: 30px;">Номер замовлення: <strong>#${escapeHtml(paidOrder)}</strong>.<br>Підтвердження оплати обробляється, ми скоро з вами зв'яжемося.</p>
+          <a href="index.html" class="btn btn--primary" style="display: inline-block; text-decoration: none;">← Повернутися на сайт</a>
+        </div>`;
+      return;
+    }
+
     loadCart();
     renderCartTable();
     initPaymentMethods();

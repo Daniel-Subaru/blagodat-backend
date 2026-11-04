@@ -1,99 +1,42 @@
-// ================================================
-// server.js — Express сервер для Благодать Крамниця
-// ================================================
-
+// Express сервер для Благодать Крамниця
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { Pool } from 'pg';
-import session from 'express-session';
-import passport from 'passport';
-import './config/passport.js';
+import { pool } from './db.js';
+import ordersRouter from './routes/orders.js';
+import monobankRouter from './routes/monobank.js';
+import adminRouter from './routes/admin.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ========== MIDDLEWARE ==========
+app.set('trust proxy', 1);
 app.use(cors({
-  origin: ['http://127.0.0.1:5500', 'http://localhost:5500', 'http://localhost:5173', 'http://localhost:3000'],
-  credentials: true
+  origin: (process.env.FRONTEND_URL || 'http://localhost:5500')
+    .split(',')
+    .concat(['http://127.0.0.1:5500', 'http://localhost:5500']),
 }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-// ========== SESSION & PASSPORT ==========
-app.use(session({
-  secret: process.env.JWT_SECRET || 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false } // set to true if using HTTPS
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+// Monobank webhook потребує raw-тіла для перевірки підпису
+app.use('/api/payment/monobank/webhook', express.raw({ type: '*/*', limit: '1mb' }));
+app.use(express.json({ limit: '1mb' }));
 
-// ========== DATABASE CONNECTION ==========
-export const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'blagodat_shop',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-});
+app.get('/', (req, res) => res.json({ message: 'Благодать Крамниця API', status: 'running' }));
 
-pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-});
-
-// Тестування з'єднання з БД
-pool.query('SELECT NOW()', (err, result) => {
-  if (err) {
-    console.error('❌ Database connection failed:', err.message);
-  } else {
-    console.log('✅ Database connected:', result.rows[0].now);
-  }
-});
-
-// ========== ROUTES ==========
-
-// Здоровлення
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Благодать Крамниця API',
-    version: '1.0.0',
-    status: 'running'
-  });
-});
-
-// Import routes
-import ordersRouter from './routes/orders.js';
-import monobankRouter from './routes/monobank.js';
-import privatbankRouter from './routes/privatbank.js';
-import authRouter from './routes/auth.js';
-
-app.use('/api/auth', authRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/payment/monobank', monobankRouter);
-app.use('/api/payment/privatbank', privatbankRouter);
+app.use('/api/admin', adminRouter);
 
-// ========== ERROR HANDLING ==========
+app.use((req, res) => res.status(404).json({ error: 'Not found' }));
 app.use((err, req, res, next) => {
   console.error('Error:', err);
-  res.status(err.status || 500).json({
-    error: err.message || 'Internal server error',
-    status: err.status || 500
-  });
+  res.status(err.status || 500).json({ error: 'Internal server error' });
 });
 
-// 404 Handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Not found' });
-});
+pool.query('SELECT NOW()')
+  .then((r) => console.log('✅ Database connected:', r.rows[0].now))
+  .catch((e) => console.error('❌ Database connection failed:', e.message));
 
-// ========== START SERVER ==========
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
-  console.log(`📝 Database: ${process.env.DB_NAME}`);
-  console.log(`🌐 CORS origin: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

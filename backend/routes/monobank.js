@@ -1,82 +1,86 @@
-// ================================================
-// routes/monobank.js — Webhook для Monobank
-// ================================================
+import { Router } from 'express';
+import axios from 'axios';
+import crypto from 'crypto';
+import { pool } from '../db.js';
+import { notifyNewOrder } from '../services/notify.js';
 
-import express from 'express';
-import { pool } from '../server.js';
-import { getMonobankInvoiceStatus } from '../utils/monobank.js';
+const router = Router();
+const MONO_API = 'https://api.monobank.ua/api/merchant';
 
-const router = express.Router();
+export async function createInvoice(order, items) {
+  const { data } = await axios.post(
+    `${MONO_API}/invoice/create`,
+    {
+      amount: Math.round(Number(order.total_price) * 100), // копійки
+      ccy: 980,
+      merchantPaymInfo: {
+        reference: String(order.id),
+        destination: `Замовлення #${order.id}`,
+        basketOrder: items.map((i) => ({
+          name: i.name,
+          qty: i.qty,
+          sum: Math.round(i.price * 100),
+          code: String(i.id),
+        })),
+      },
+      redirectUrl: `${process.env.FRONTEND_URL}/checkout.html?paid=${order.id}`,
+      webHookUrl: `${process.env.PUBLIC_API_URL}/api/payment/monobank/webhook`,
+    },
+    { headers: { 'X-Token': process.env.MONOBANK_TOKEN } }
+  );
+  return data; // { invoiceId, pageUrl }
+}
 
-// ========== POST /api/payment/monobank/webhook ==========
-// Webhook від Monobank при платежі
+let cachedKey = null;
+async function getPubKey() {
+  if (!cachedKey) {
+    const { data } = await axios.get(`${MONO_API}/pubkey`, {
+      headers: { 'X-Token': process.env.MONOBANK_TOKEN },
+    });
+    cachedKey = Buffer.from(data.key, 'base64').toString('utf8');
+  }
+  return cachedKey;
+}
+
+async function verifySignature(rawBody, signature) {
+  if (!signature) return false;
+  const verify = crypto.createVerify('SHA256');
+  verify.update(rawBody);
+  return verify.verify(await getPubKey(), signature, 'base64');
+}
+
+// Webhook від Monobank. Потрібне raw-тіло (підключено в server.js)
 router.post('/webhook', async (req, res) => {
   try {
-    const data = req.body;
-    console.log('Monobank webhook received:', data);
+    if (!(await verifySignature(req.body, req.get('X-Sign')))) {
+      return res.status(403).json({ error: 'Invalid signature' });
+    }
+    const data = JSON.parse(req.body.toString('utf8'));
+    const { invoiceId, status } = data;
 
-    // TODO: Перевірити підпис (X-Sign header)
+    const payment = (await pool.query('SELECT * FROM payments WHERE payment_id = $1', [invoiceId])).rows[0];
+    if (!payment) return res.sendStatus(200);
 
-    if (data.status === 'success' && data.invoiceId) {
-      // Оновити статус замовлення
-      const result = await pool.query(
-        `SELECT o.id FROM orders o
-         JOIN payments p ON o.id = p.order_id
-         WHERE p.payment_id = $1`,
-        [data.invoiceId]
+    if (status === 'success') {
+      // Захист від повторних webhook: сповіщаємо лише при першому переході в paid
+      const upd = await pool.query(
+        "UPDATE payments SET status='completed', gateway_response=$2 WHERE id=$1 AND status<>'completed' RETURNING id",
+        [payment.id, JSON.stringify(data)]
       );
-
-      if (result.rows.length > 0) {
-        const orderId = result.rows[0].id;
-
-        await pool.query(
-          `UPDATE orders SET status = $1 WHERE id = $2`,
-          ['paid', orderId]
-        );
-
-        await pool.query(
-          `UPDATE payments SET status = $1, gateway_response = $2 WHERE payment_id = $3`,
-          ['completed', JSON.stringify(data), data.invoiceId]
-        );
-
-        console.log(`✅ Order ${orderId} marked as paid`);
+      if (upd.rowCount) {
+        await pool.query("UPDATE orders SET status='paid' WHERE id=$1", [payment.order_id]);
+        notifyNewOrder(payment.order_id);
       }
+    } else if (['failure', 'expired', 'reversed'].includes(status)) {
+      await pool.query("UPDATE payments SET status='failed', gateway_response=$2 WHERE id=$1 AND status<>'completed'", [
+        payment.id,
+        JSON.stringify(data),
+      ]);
     }
-
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Webhook error:', error);
-    res.status(500).json({ error: 'Webhook processing failed' });
-  }
-});
-
-// ========== GET /api/payment/monobank/status/:invoiceId ==========
-// Отримати статус платежу
-router.get('/status/:invoiceId', async (req, res) => {
-  try {
-    const { invoiceId } = req.params;
-
-    const status = await getMonobankInvoiceStatus(invoiceId);
-
-    // Оновити БД
-    const result = await pool.query(
-      `SELECT o.id FROM orders o
-       JOIN payments p ON o.id = p.order_id
-       WHERE p.payment_id = $1`,
-      [invoiceId]
-    );
-
-    if (result.rows.length > 0 && status.status === 'success') {
-      await pool.query(
-        `UPDATE orders SET status = $1 WHERE id = $2`,
-        ['paid', result.rows[0].id]
-      );
-    }
-
-    res.json(status);
-  } catch (error) {
-    console.error('Status check error:', error);
-    res.status(500).json({ error: 'Status check failed' });
+    res.sendStatus(200);
+  } catch (err) {
+    console.error('Monobank webhook error:', err.message);
+    res.sendStatus(500);
   }
 });
 
